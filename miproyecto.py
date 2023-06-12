@@ -63,44 +63,62 @@ class MiPersona(Persona):
 
 #funcion para crear una interfaz grafica
 def inter(): #se usa el ejemplo de CTk como base para la interfaz
+    """
+    Arg:
+    """
     customtkinter.set_appearance_mode("System")  # Modes: system (default), light, dark
     customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 
     app = customtkinter.CTk()  # create CTk window like you do with the Tk window
-    app.geometry("800x700")
+    app.geometry("850x700")
+    app.title("Tercer proyecto programado")
     miAgenda= MiAgenda(None,None)
 
     #Tabs
     tabview = customtkinter.CTkTabview(master=app,height=500,width=500)
-    tabview.pack(padx=50, pady=100)
-    tabview.add("Puntos")  # add tab at the end
-    tabview.add("Participantes")  # add tab at the end
+    tabview.pack()
+    tabview.add("Agenda") 
+    tabview.add("Participantes") 
+    tabview.add("Apartados")  
+    tabview.add("Puntos")  
+    tabview.add("Discusiones") 
+    tabview.place_configure(relx=0.2,rely=0.005,height=700, width=750)
+    #funciones de la interfaz
     def button_function1():
         global miAgenda
         dialog = customtkinter.CTkInputDialog(text="Titulo de la agenda:", title="Agenda")
         text = dialog.get_input()  # waits for input
         miAgenda=MiAgenda(fecha=datetime.today(),titulo=text)
-        
-    def button_function2():
-        textbox = customtkinter.CTkTextbox(app)
+        textbox = customtkinter.CTkTextbox(master=tabview.tab("Agenda"), width=400, corner_radius=0)
+        textbox.insert("0.0",miAgenda.titulo )
+        textbox.configure(state="disabled")  
         textbox.pack(padx=50, pady=100)
-        textbox.insert("0,0", miAgenda.asDict)
-        textbox.configure(state="disabled")# configure textbox to be read-only
+    def button_function2():
+        pass
     def button_function3():
-        dialog = customtkinter.CTkInputDialog(text="Nombre:", title="Agenda")
+        dialog = customtkinter.CTkInputDialog(text="Nombre:", title="Participante")
         text1 = dialog.get_input()
-        dialog = customtkinter.CTkInputDialog(text="Apellido 1:", title="Agenda")
+        dialog = customtkinter.CTkInputDialog(text="Apellido 1:", title="Participante")
         text2 = dialog.get_input()
-        dialog = customtkinter.CTkInputDialog(text="Apellido 2:", title="Agenda")
+        dialog = customtkinter.CTkInputDialog(text="Apellido 2:", title="Participante")
         text3 = dialog.get_input()
-        miAgenda.agregar_participante(text1,text2,text3)
-    # Use CTkButton instead of tkinter Button
-    button1 = customtkinter.CTkButton(master=app, text="Crear la agenda", command=button_function1)
-    button1.place(relx=0.1, rely=0.1, anchor=tkinter.CENTER)
-    button2 = customtkinter.CTkButton(master=app, text="Imprimir agenda", command=button_function2)
+        miAgenda.agregar_participante(text1.capitalize,text2.capitalize,text3.capitalize)
+        textbox = customtkinter.CTkTextbox(master=tabview.tab("Participantes"), width=400, corner_radius=0)
+        textbox.insert("0.0","{0}".format(miAgenda.participantes._asList))
+        textbox.configure(state="disabled")  
+        textbox.pack(padx=50, pady=100)
+
+
+    #Botones
+    button_Agenda = customtkinter.CTkButton(master=app, text="Crear la agenda", command=button_function1)
+    button_Agenda.place(relx=0.1, rely=0.1, anchor=tkinter.CENTER)
+    button2 = customtkinter.CTkButton(master=app, text="holder", command=button_function2)
     button2.place(relx=0.1, rely=0.9, anchor=tkinter.CENTER)
-    button3 = customtkinter.CTkButton(master=app, text="Agregar participante", command=button_function3)
-    button3.place(relx=0.1, rely=0.2, anchor=tkinter.CENTER)
+    button_Participantes = customtkinter.CTkButton(master=tabview.tab("Participantes"), text="Agregar participante", command=button_function3)
+    button_Participantes.configure(width=80, height=30)
+    button_Participantes.place(relx=0.85, rely=0.1, anchor=tkinter.CENTER)
+    button_tab = customtkinter.CTkButton(master=tabview.tab("Puntos"), text="button tab 2")
+    button_tab.place(relx=0.7)
 
     app.mainloop()
 inter()
