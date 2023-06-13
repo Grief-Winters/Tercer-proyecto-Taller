@@ -4,7 +4,7 @@ from typing import Any, Self, Optional
 import tkinter
 import customtkinter
 from html_gen import generar_html as gen, mostrar_html_en_ventana as show
-
+from crear_html import crear_html_agenda
 # funcionalidades del proyecto
 class MiLista(Lista):
     """
@@ -218,10 +218,48 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         lista.append(miApartado.imprimir_lista(miApartado))
         lista.append(miPunto.imprimir_lista(miPunto))
         lista.append(miDiscusion.imprimir_lista(miDiscusion))
-        html=gen(lista)
+        html=crear_html_agenda(lista)
         show(html)
+    #botones que eliminan
+    def button_function_del1():
+        miDiscusion.imprimir_lista(miDiscusion)
+        print("==================")
+        dialog = customtkinter.CTkInputDialog(text="Transcripcion:", title="Transcripcion")
+        text1 = dialog.get_input()
+        dialog = customtkinter.CTkInputDialog(text="Nombre del participante:", title="Participante")
+        text2 = dialog.get_input()
+        miDiscusion.borrar(MiDiscusion(text1,text2))
+        miDiscusion.imprimir_lista(miDiscusion)
+    def button_function_del2():
+        miPersona.imprimir_lista(miPersona)
+        print("==================")
+        dialog = customtkinter.CTkInputDialog(text="Nombre:", title="Participante")
+        text1 = dialog.get_input()
+        dialog = customtkinter.CTkInputDialog(text="Apellido 1:", title="Participante")
+        text2 = dialog.get_input()
+        dialog = customtkinter.CTkInputDialog(text="Apellido 2:", title="Participante")
+        text3 = dialog.get_input()
+        miPersona.borrar(MiPersona(text1.capitalize(),text2.capitalize(),text3.capitalize()))
+        miPersona.imprimir_lista(miPersona) 
+    def button_function_del3():
+        miApartado.imprimir_lista(miApartado)
+        print("==================")
+        dialog = customtkinter.CTkInputDialog(text="Nombre:", title="Apartado")
+        text1 = dialog.get_input()
+        dialog = customtkinter.CTkInputDialog(text="Descripcion:", title="Apartado")
+        text2 = dialog.get_input()
+        miApartado.borrar(MiApartado(text1.capitalize(),text2.capitalize()))
+        miApartado.imprimir_lista(miApartado)
+    def button_function_del4():
+        miPunto.imprimir_lista(miPunto)
+        print("==================")
+        dialog = customtkinter.CTkInputDialog(text="Nombre:", title="Punto")
+        text1 = dialog.get_input()
+        dialog = customtkinter.CTkInputDialog(text="Descripcion:", title="Punto")
+        text2 = dialog.get_input()
+        miPunto.borrar(MiPunto(text1.capitalize(),text2.capitalize()))
+        miPunto.imprimir_lista(miPunto)
 
-    
     #Botones
     button_Agenda = customtkinter.CTkButton(master=app, text="Crear la agenda", command=button_function1)
     button_Agenda.place(relx=0.5, rely=0.1, anchor=tkinter.CENTER)
