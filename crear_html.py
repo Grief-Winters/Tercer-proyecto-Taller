@@ -1,5 +1,4 @@
 import io
-import webview
 
 def crear_html_agenda(lista_principal):
     # Crear el contenido HTML
@@ -63,11 +62,5 @@ def crear_html_agenda(lista_principal):
     with io.open('archivo.html', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido_html)
 
-def mostrar_html_en_ventana(codigo_html):
-    # Crea una ventana y carga el contenido HTML
-    webview.create_window("Visor HTML", html=codigo_html)
-
-    # Inicia el bucle de la aplicación
-    webview.start()
 
     print('El archivo HTML se ha creado correctamente.')

@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Any, Self, Optional
 import tkinter
 import customtkinter
-from crear_html import crear_html_agenda,mostrar_html_en_ventana
+from crear_html import crear_html_agenda
 # funcionalidades del proyecto
 class MiLista(Lista):
     """
@@ -231,7 +231,7 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         lista.append(miPunto.imprimir_lista(miPunto))
         lista.append(miDiscusion.imprimir_lista(miDiscusion))
         html=crear_html_agenda(lista)
-        mostrar_html_en_ventana(html)
+
 
     #botones que eliminan
     def button_function_del1():
