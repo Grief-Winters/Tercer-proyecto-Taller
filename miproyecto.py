@@ -3,10 +3,15 @@ from datetime import datetime
 from typing import Any, Self, Optional
 import tkinter
 import customtkinter
+from html_gen import generar_html as gen, mostrar_html_en_ventana as show
 
 # funcionalidades del proyecto
 class MiLista(Lista):
+    """
+    constructor de clase MiLista que hereda la clase Lista
+    """
     def __init__(self) -> None:
+
         super().__init__()
 
     def borrar(self, nodo: Self) -> None:
@@ -45,11 +50,18 @@ class MiLista(Lista):
         result = []
         nodo = lista
         while nodo:
-            result.append(str(nodo))  # Agregar representación legible del objeto
+            result.append(str(nodo))
             print(str(nodo))
             nodo = nodo.sig
         return (result[1:])
 class MiAgenda(MiLista):
+    """
+    constructor de clase MiAgenda que hereda la clase MiLista
+        Args:
+        titulo (str):Titutlo de la agenda
+        fecha (libreria):Fecha exacta de creacion
+        participantes(class):Participantes de la agenda
+    """
     def __init__(self,titulo:str,fecha:datetime) -> None:
         super().__init__()
         self.titulo:str=titulo
@@ -58,21 +70,34 @@ class MiAgenda(MiLista):
         self.apartados:MiApartado
 
     def __str__(self) -> str:
-        return ("Titulo: {0} \n Fecha:{1} \n Participantes: {2}".format(self.titulo,self.fecha,self.participantes))
+        return ("Titulo: {0} \n Fecha:{1}".format(self.titulo,self.fecha))
     
 class MiPersona(MiLista):
+    """
+    constructor de clase MiPersona que hereda la clase MiLista
+        Args:
+        nombre (str): Nombre de la persona
+        apellido1 (str): Primer apellido de la persona
+        apellido2 (str): Segundo apellido de la persona
+    """
     def __init__(self, nombre: str, apellido1: str, apellido2: str) -> None:
         super().__init__()
         self.nombre = nombre
         self.apellido1 = apellido1
         self.apellido2 = apellido2
 
-
-
     def __str__(self) -> str:
         return ("{0} {1} {2}".format(self.nombre, self.apellido1, self.apellido2))
     
 class MiApartado(MiLista):
+    """
+    constructor de clase MiApartado que hereda la clase MiLista
+        Args:
+        nombre (str):Nombre del apartado
+        descripcion (str): Descripcion del apartado
+        punto (Class):Punto en el apartado
+
+    """
     def __init__(self,nombre:str,descripcion:str) -> None:
         super().__init__()
         self.nombre:str=nombre
@@ -81,7 +106,12 @@ class MiApartado(MiLista):
 
     def __str__(self) -> str:
         return ("Apartado: {0} \nDescripcion:{1}".format(self.nombre,self.descripcion))
+    
 class MiPunto(MiLista):
+    """
+    constructor de clase Mipunto que hereda la clase MiLista
+    arg:
+    """
     def __init__(self,nombre:str,descripcion:str) -> None:
         super().__init__()
         self.nombre:str=nombre
@@ -91,6 +121,9 @@ class MiPunto(MiLista):
         return ("Punto: {0} \nDescripcion:{1}".format(self.nombre,self.descripcion))
 
 class MiDiscusion(MiLista):
+    """
+    constructor de clase MiDiscusion que hereda la clase MiLista
+    """
     def __init__(self,transcripcion:str,participante:str) -> None:
         super().__init__()
         self.transcripcion:str=transcripcion
@@ -98,24 +131,11 @@ class MiDiscusion(MiLista):
 
     def __str__(self) -> str:
         return ("Transcripción:{0} \n Participante: {1}".format(self.transcripcion,self.participante))
-"""
-Discusiones=MiDiscusion("Hola hola", "Asdrubal")
-Discusiones.agregar(MiDiscusion("Adios adios","Yuba"))
-miPersona=MiPersona("Asdru","ulate","cama")
-miPersona.agregar(MiPersona("Asdru","ula","cama"))
-def imprimir_lista(lista: Lista) -> None:
-    nodo = lista
-    while nodo:
-        print(nodo)
-        nodo = nodo.sig
-imprimir_lista(Discusiones)
-imprimir_lista(miPersona)
-"""
 
 #funcion para crear una interfaz grafica
 def inter(): #se usa el ejemplo de CTk como base para la interfaz
     """
-    Arg:
+
     """
     customtkinter.set_appearance_mode("System")  # Modes: system (default), light, dark
     customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
@@ -123,7 +143,7 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
     app = customtkinter.CTk()  # create CTk window like you do with the Tk window
     app.geometry("500x500")
     app.title("Tercer proyecto programado")
-    miAgenda= MiAgenda
+    miAgenda= MiAgenda(None,None)
     miPersona=MiPersona(None,None,None)
     miApartado=MiApartado(None,None)
     miPunto=MiPunto(None,None)
@@ -178,18 +198,30 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         text1 = dialog.get_input()
         dialog = customtkinter.CTkInputDialog(text="Descripcion:", title="Apartado")
         text2 = dialog.get_input()
-        miApartado.agregar(MiApartado(text1.capitalize,text2.capitalize))
+        miApartado.agregar(MiApartado(text1.capitalize(),text2.capitalize()))
+        miApartado.imprimir_lista(miApartado)
 
     def button_function5():
         """
         Botón para añadir un punto
         """
-        dialog = customtkinter.CTkInputDialog(text="Nombre:", title="Apartado")
+        dialog = customtkinter.CTkInputDialog(text="Nombre:", title="Punto")
         text1 = dialog.get_input()
-        dialog = customtkinter.CTkInputDialog(text="Descripcion:", title="Apartado")
+        dialog = customtkinter.CTkInputDialog(text="Descripcion:", title="Punto")
         text2 = dialog.get_input()
+        miPunto.agregar(MiPunto(text1.capitalize(),text2.capitalize()))
+        miPunto.imprimir_lista(miPunto)
     def button_function6():
-        pass
+        lista=[]
+        lista.append(miAgenda.imprimir_lista(miAgenda))
+        lista.append(miPersona.imprimir_lista(miPersona))
+        lista.append(miApartado.imprimir_lista(miApartado))
+        lista.append(miPunto.imprimir_lista(miPunto))
+        lista.append(miDiscusion.imprimir_lista(miDiscusion))
+        html=gen(lista)
+        show(html)
+
+    
     #Botones
     button_Agenda = customtkinter.CTkButton(master=app, text="Crear la agenda", command=button_function1)
     button_Agenda.place(relx=0.5, rely=0.1, anchor=tkinter.CENTER)
@@ -203,6 +235,16 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
     button_punto.place(relx=0.5,rely=0.4,anchor=tkinter.CENTER)
     button_HTML = customtkinter.CTkButton(master=app, text="Generar HTML",command=button_function6)
     button_HTML.place(relx=0.5,rely=0.6,anchor=tkinter.CENTER)
+
+    #botones para eliminar
+    button_discusion_del = customtkinter.CTkButton(master=app, text="Eliminar discusión", command=button_function_del1)
+    button_discusion_del.place(relx=0.8, rely=0.5, anchor=tkinter.CENTER)
+    button_Participantes_del = customtkinter.CTkButton(master=app, text="Eliminar participante", command=button_function_del2)
+    button_Participantes_del.place(relx=0.8, rely=0.2, anchor=tkinter.CENTER)
+    button_apartados_del = customtkinter.CTkButton(master=app, text="Eliminar Apartado", command=button_function_del3)
+    button_apartados_del.place(relx=0.8, rely=0.3, anchor=tkinter.CENTER)
+    button_punto_del = customtkinter.CTkButton(master=app, text="Eliminar Punto",command=button_function_del4)
+    button_punto_del.place(relx=0.8,rely=0.4,anchor=tkinter.CENTER)
 
     app.mainloop()
 inter()
