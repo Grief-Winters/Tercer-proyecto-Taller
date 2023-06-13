@@ -3,8 +3,7 @@ from datetime import datetime
 from typing import Any, Self, Optional
 import tkinter
 import customtkinter
-from html_gen import generar_html as gen, mostrar_html_en_ventana as show
-from crear_html import crear_html_agenda
+from crear_html import crear_html_agenda,mostrar_html_en_ventana
 # funcionalidades del proyecto
 class MiLista(Lista):
     """
@@ -14,14 +13,14 @@ class MiLista(Lista):
 
         super().__init__()
 
-    def borrar(self, nodo: Self) -> None:
+    def borrar(self, nodo) -> None:
         self._borrar(self, nodo)
 
-    def _borrar(self, raiz, nodo: Self) -> None:
-        if raiz.sig == nodo:
-            raiz.sig = nodo.sig
+    def _borrar(self, raiz, nodo) -> None:
+        if raiz.sig is not None and raiz.sig.valor == nodo.valor:
+            raiz.sig = raiz.sig.sig
             del nodo
-        else:
+        elif raiz.sig is not None:
             self._borrar(raiz.sig, nodo)
 
     def buscar(self, key) -> Optional[Self]:
@@ -85,9 +84,9 @@ class MiPersona(MiLista):
         self.nombre = nombre
         self.apellido1 = apellido1
         self.apellido2 = apellido2
-
+        self.valor = self.nombre
     def __str__(self) -> str:
-        return ("{0} {1} {2}".format(self.nombre, self.apellido1, self.apellido2))
+        return ("Nombre completo: {0} {1} {2}".format(self.nombre, self.apellido1, self.apellido2))
     
 class MiApartado(MiLista):
     """
@@ -103,6 +102,7 @@ class MiApartado(MiLista):
         self.nombre:str=nombre
         self.descripcion:str=descripcion
         self.puntos:MiPunto=None
+        self.valor = self.nombre
 
     def __str__(self) -> str:
         return ("Apartado: {0} \nDescripcion:{1}".format(self.nombre,self.descripcion))
@@ -117,6 +117,7 @@ class MiPunto(MiLista):
         self.nombre:str=nombre
         self.descripcion:str=descripcion
         self.discusiones:MiDiscusion=None
+        self.valor = self.nombre
     def __str__(self) -> str:
         return ("Punto: {0} \nDescripcion:{1}".format(self.nombre,self.descripcion))
 
@@ -128,7 +129,7 @@ class MiDiscusion(MiLista):
         super().__init__()
         self.transcripcion:str=transcripcion
         self.participante:str=participante
-
+        self.valor = self.transcripcion
     def __str__(self) -> str:
         return ("Transcripción:{0} \n Participante: {1}".format(self.transcripcion,self.participante))
 
@@ -166,13 +167,18 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         Botón para añadir una discusion
         """
         global miDiscusion
+        print("==================")
+        miPersona.imprimir_lista(miPersona)
+        print("==================")
         dialog = customtkinter.CTkInputDialog(text="Transcripcion:", title="Transcripcion")
         text1 = dialog.get_input()
         dialog = customtkinter.CTkInputDialog(text="Nombre del participante:", title="Participante")
         text2 = dialog.get_input()
         if miPersona.buscar(lambda miPersona: miPersona.nombre == text2):
             miDiscusion.agregar(MiDiscusion(text1,text2))
+            print("==================")
             miDiscusion.imprimir_lista(miDiscusion)
+            print("==================")
         else:
             dialog = customtkinter.CTkInputDialog(text="El participante no existe", title="ERROR")
    
@@ -188,7 +194,9 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         dialog = customtkinter.CTkInputDialog(text="Apellido 2:", title="Participante")
         text3 = dialog.get_input()
         miPersona.agregar(MiPersona(text1.capitalize(),text2.capitalize(),text3.capitalize()))
+        print("==================")
         miPersona.imprimir_lista(miPersona) 
+        print("==================")
 
     def button_function4():
         """
@@ -199,7 +207,9 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         dialog = customtkinter.CTkInputDialog(text="Descripcion:", title="Apartado")
         text2 = dialog.get_input()
         miApartado.agregar(MiApartado(text1.capitalize(),text2.capitalize()))
+        print("==================")
         miApartado.imprimir_lista(miApartado)
+        print("==================")
 
     def button_function5():
         """
@@ -210,7 +220,9 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         dialog = customtkinter.CTkInputDialog(text="Descripcion:", title="Punto")
         text2 = dialog.get_input()
         miPunto.agregar(MiPunto(text1.capitalize(),text2.capitalize()))
+        print("==================")
         miPunto.imprimir_lista(miPunto)
+        print("==================")
     def button_function6():
         lista=[]
         lista.append(miAgenda.imprimir_lista(miAgenda))
@@ -219,9 +231,11 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         lista.append(miPunto.imprimir_lista(miPunto))
         lista.append(miDiscusion.imprimir_lista(miDiscusion))
         html=crear_html_agenda(lista)
-        show(html)
+        mostrar_html_en_ventana(html)
+
     #botones que eliminan
     def button_function_del1():
+        print("==================")
         miDiscusion.imprimir_lista(miDiscusion)
         print("==================")
         dialog = customtkinter.CTkInputDialog(text="Transcripcion:", title="Transcripcion")
@@ -229,8 +243,11 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         dialog = customtkinter.CTkInputDialog(text="Nombre del participante:", title="Participante")
         text2 = dialog.get_input()
         miDiscusion.borrar(MiDiscusion(text1,text2))
+        print("==================")
         miDiscusion.imprimir_lista(miDiscusion)
+        print("==================")
     def button_function_del2():
+        print("==================")
         miPersona.imprimir_lista(miPersona)
         print("==================")
         dialog = customtkinter.CTkInputDialog(text="Nombre:", title="Participante")
@@ -240,8 +257,11 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         dialog = customtkinter.CTkInputDialog(text="Apellido 2:", title="Participante")
         text3 = dialog.get_input()
         miPersona.borrar(MiPersona(text1.capitalize(),text2.capitalize(),text3.capitalize()))
+        print("==================")
         miPersona.imprimir_lista(miPersona) 
+        print("==================")
     def button_function_del3():
+        print("==================")
         miApartado.imprimir_lista(miApartado)
         print("==================")
         dialog = customtkinter.CTkInputDialog(text="Nombre:", title="Apartado")
@@ -249,8 +269,11 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         dialog = customtkinter.CTkInputDialog(text="Descripcion:", title="Apartado")
         text2 = dialog.get_input()
         miApartado.borrar(MiApartado(text1.capitalize(),text2.capitalize()))
+        print("==================")
         miApartado.imprimir_lista(miApartado)
+        print("==================")
     def button_function_del4():
+        print("==================")
         miPunto.imprimir_lista(miPunto)
         print("==================")
         dialog = customtkinter.CTkInputDialog(text="Nombre:", title="Punto")
@@ -258,7 +281,9 @@ def inter(): #se usa el ejemplo de CTk como base para la interfaz
         dialog = customtkinter.CTkInputDialog(text="Descripcion:", title="Punto")
         text2 = dialog.get_input()
         miPunto.borrar(MiPunto(text1.capitalize(),text2.capitalize()))
+        print("==================")
         miPunto.imprimir_lista(miPunto)
+        print("==================")
 
     #Botones
     button_Agenda = customtkinter.CTkButton(master=app, text="Crear la agenda", command=button_function1)

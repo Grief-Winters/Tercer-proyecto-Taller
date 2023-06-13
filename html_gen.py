@@ -28,7 +28,7 @@ def mostrar_html_en_ventana(codigo_html):
 
     # Inicia el bucle de la aplicación
     webview.start()
-"""
+
 # Ejemplo de lista de elementos
 lista = ["Elemento 1 ", "Elemento 2", "Elemento 3"]
 
@@ -43,4 +43,3 @@ sesion01_html = file.read()
 # Muestra el código HTML en una ventana
 mostrar_html_en_ventana(codigo_html_generado)
 mostrar_html_en_ventana(sesion01_html)
-"""
